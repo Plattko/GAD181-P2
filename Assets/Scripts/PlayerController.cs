@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private Animator animator;
 
     public float moveSpeed = 5f;
     public float attackDamage = 1f;
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -40,5 +42,10 @@ public class PlayerController : MonoBehaviour
     private void OnMove(InputValue inputValue)
     {
         moveInput = inputValue.Get<Vector2>();
+    }
+
+    private void OnAttack()
+    {
+        //animator.SetTrigger();
     }
 }
