@@ -9,6 +9,7 @@ public class Weapon : MonoBehaviour
     private Camera mainCamera;
     [HideInInspector] public Animator animator;
     private Transform weaponPivot;
+    private PolygonCollider2D attackCollider;
 
     private Vector2 pivotDirection;
     
@@ -20,6 +21,7 @@ public class Weapon : MonoBehaviour
         mainCamera = Camera.main;
         animator = GetComponent<Animator>();
         weaponPivot = transform.parent;
+        attackCollider = weaponPivot.transform.GetChild(1).GetComponent<PolygonCollider2D>();
     }
 
     // Update is called once per frame
@@ -49,10 +51,12 @@ public class Weapon : MonoBehaviour
     public void IsAttacking()
     {
         isAttacking = true;
+        attackCollider.enabled = true;
     }
 
     public void IsNotAttacking()
     {
         isAttacking = false;
+        attackCollider.enabled = false;
     }
 }
