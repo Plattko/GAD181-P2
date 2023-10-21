@@ -10,9 +10,13 @@ public class PlayerController : MonoBehaviour
 
     public float moveSpeed = 5f;
     public float attackDamage = 1f;
+    public float attackCooldown = 0.3f;
+
     private float idleSlow = 0.9f;
 
     private Vector2 moveInput;
+
+    private bool canAttack = true;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +50,19 @@ public class PlayerController : MonoBehaviour
 
     private void OnAttack()
     {
-        //animator.SetTrigger();
+        if (canAttack)
+        {
+            Weapon weapon = GetComponentInChildren<Weapon>();
+            weapon.animator.SetTrigger("Attack");
+
+            canAttack = false;
+            StartCoroutine(AttackCooldown());
+        }
+    }
+
+    private IEnumerator AttackCooldown()
+    {
+        yield return new WaitForSeconds(attackCooldown);
+        canAttack = true;
     }
 }
