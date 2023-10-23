@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     
     [HideInInspector] public int attackDMG = -10;
     public float startingHealth = 35f;
-    private float currentHealth;
+    [SerializeField] private float currentHealth;
     
     // Start is called before the first frame update
     void Start()
@@ -27,6 +27,15 @@ public class Enemy : MonoBehaviour
             Attack();
         }
     }
+
+    private void OnEnable()
+    {
+        if (!animator.GetBool("IsDead"))
+        {
+            currentHealth = startingHealth;
+        }
+    }
+
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
@@ -50,6 +59,7 @@ public class Enemy : MonoBehaviour
         Debug.Log("Enemy died!");
 
         animator.SetBool("IsDead", true);
+        animator.keepAnimatorStateOnDisable = true;
 
         Instantiate(potionPrefab, transform.position, Quaternion.Euler(0f, 0f, 0f));
 

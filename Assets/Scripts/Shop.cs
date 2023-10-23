@@ -80,17 +80,25 @@ public class Shop : MonoBehaviour
             playerController.attackDamage += dmgIncrease;
             playerController.UpdateHealth(-dmgCurrentCost);
 
+            float newCost = dmgCurrentCost * 1.5f;
+            dmgCurrentCost = Mathf.RoundToInt(newCost);
+            dmgCostText.text = dmgCurrentCost + " HP";
+
             Debug.Log("Attack damage is " + playerController.attackDamage);
         }
     }
 
     public void UpgradeMoveSpeed()
     {
-        if (playerController.currentHealth > dmgCurrentCost)
+        if (playerController.currentHealth > moveCurrentCost)
         {
             //float moveSpeed = playerController.moveSpeed;
             playerController.moveSpeed += moveSpeedIncrease;
-            playerController.UpdateHealth(-dmgCurrentCost);
+            playerController.UpdateHealth(-moveCurrentCost);
+
+            float newCost = moveCurrentCost * 1.5f;
+            moveCurrentCost = Mathf.RoundToInt(newCost);
+            moveCostText.text = moveCurrentCost + " HP";
 
             Debug.Log("Move speed is " + playerController.moveSpeed);
         }
