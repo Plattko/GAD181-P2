@@ -84,9 +84,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f934fceb1287f947ba32f3dd5e3d9b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTransform: {fileID: 0}
-  attractDistance: 2.5
-  attractSpeed: 3
+  attractDistance: 3.5
+  attractSpeed: 6
   idleSlow: 0.1
 --- !u!1 &948738516483807376
 GameObject:

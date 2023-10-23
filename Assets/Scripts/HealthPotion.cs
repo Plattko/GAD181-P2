@@ -5,6 +5,7 @@ using UnityEngine;
 public class HealthPotion : MonoBehaviour
 {
     public float attractDistance = 3.5f;
+    private float attractDistanceSqr;
     public float attractSpeed = 6f;
     public float idleSlow = 0.1f;
 
@@ -16,6 +17,7 @@ public class HealthPotion : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         playerTransform = GameObject.Find("Player").transform;
+        attractDistanceSqr = attractDistance * attractDistance;
     }
 
     // Update is called once per frame
@@ -29,12 +31,12 @@ public class HealthPotion : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Vector2.Distance(playerTransform.position, transform.position) < attractDistance)
+        if ((playerTransform.position - transform.position).sqrMagnitude < attractDistanceSqr)
         {
             Vector2 targetDirection = (playerTransform.position - transform.position).normalized;
             rb.velocity = new Vector2(targetDirection.x, targetDirection.y) * attractSpeed;
         }
-        else if (Vector2.Distance(playerTransform.position, transform.position) > attractDistance)
+        else if ((playerTransform.position - transform.position).sqrMagnitude > attractDistanceSqr)
         {
             rb.velocity = Vector2.Lerp(rb.velocity, Vector2.zero, idleSlow);
         }

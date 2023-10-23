@@ -106,6 +106,14 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+            enemy.TakeDamage(attackDamage);
+        }
+    }
 
     private IEnumerator AttackCooldown()
     {
