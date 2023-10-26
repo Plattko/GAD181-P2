@@ -10,10 +10,10 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     public HealthBar healthBar;
 
-    public float startingMoveSpeed = 5f;
-    [HideInInspector] public float moveSpeed = 5f;
+    public float startingMoveSpeed = 6f;
+    [HideInInspector] public float moveSpeed;
     public float startingAttackDamage = 10f;
-    [HideInInspector] public float attackDamage = 10f;
+    [HideInInspector] public float attackDamage;
     private float attackCooldown = 0.3f;
 
     private float idleSlow = 0.9f;
