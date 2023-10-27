@@ -30,10 +30,7 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
-        if (!animator.GetBool("IsDead"))
-        {
-            currentHealth = startingHealth;
-        }
+        currentHealth = startingHealth;
     }
 
     public void TakeDamage(float damage)
@@ -59,12 +56,13 @@ public class Enemy : MonoBehaviour
         Debug.Log("Enemy died!");
 
         animator.SetBool("IsDead", true);
-        animator.keepAnimatorStateOnDisable = true;
-
-        Instantiate(potionPrefab, transform.position, Quaternion.Euler(0f, 0f, 0f));
-
         GetComponent<CapsuleCollider2D>().enabled = false;
         GetComponentInChildren<CircleCollider2D>().enabled = false;
+
+        EnemySpawnPoint enemySpawnPoint = transform.parent.GetComponent<EnemySpawnPoint>();
+        enemySpawnPoint.EnemyDied();
+
+        Instantiate(potionPrefab, transform.position, Quaternion.Euler(0f, 0f, 0f));
         
         this.enabled = false;
     }
