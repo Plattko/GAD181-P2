@@ -12,7 +12,7 @@ public class EnemySpawnZone : MonoBehaviour
         SetUpSpawnPoints();
     }
 
-    private void SetUpSpawnPoints()
+    public void SetUpSpawnPoints()
     {
         foreach (Transform spawnPoint in spawnPoints)
         {

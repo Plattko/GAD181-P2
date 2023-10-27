@@ -5,9 +5,13 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     private Animator animator;
+    private CapsuleCollider2D hurtbox;
+    private CircleCollider2D pushbox;
+
     public GameObject potionPrefab;
     
     [HideInInspector] public int attackDMG = -10;
+    
     public float startingHealth = 35f;
     [SerializeField] private float currentHealth;
     
@@ -15,6 +19,8 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
+        hurtbox = GetComponent<CapsuleCollider2D>();
+        pushbox = GetComponentInChildren<CircleCollider2D>();
 
         currentHealth = startingHealth;
     }
@@ -31,14 +37,24 @@ public class Enemy : MonoBehaviour
     private void OnEnable()
     {
         currentHealth = startingHealth;
+        
+        if (!hurtbox.enabled)
+        {
+            hurtbox.enabled = true;
+        }
+
+        if (!pushbox.enabled)
+        {
+            pushbox.enabled = true;
+        }
     }
 
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        Debug.Log("<color=green>Enemy health is </color>" + currentHealth);
-
         animator.SetTrigger("Hurt");
+
+        Debug.Log("<color=green>Enemy health is </color>" + currentHealth);
 
         if (currentHealth <= 0)
         {
@@ -53,17 +69,15 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log("Enemy died!");
-
+        hurtbox.enabled = false;
+        pushbox.enabled = false;
         animator.SetBool("IsDead", true);
-        GetComponent<CapsuleCollider2D>().enabled = false;
-        GetComponentInChildren<CircleCollider2D>().enabled = false;
 
-        EnemySpawnPoint enemySpawnPoint = transform.parent.GetComponent<EnemySpawnPoint>();
-        enemySpawnPoint.EnemyDied();
+        EnemySpawnPoint spawnPoint = transform.parent.GetComponent<EnemySpawnPoint>();
+        spawnPoint.EnemyDied();
 
         Instantiate(potionPrefab, transform.position, Quaternion.Euler(0f, 0f, 0f));
-        
-        this.enabled = false;
+
+        Debug.Log("Enemy died!");
     }
 }

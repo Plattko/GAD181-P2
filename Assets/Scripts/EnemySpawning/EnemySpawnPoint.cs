@@ -7,7 +7,7 @@ public class EnemySpawnPoint : MonoBehaviour
     public GameObject enemyPrefab;
     [HideInInspector] public GameObject enemy;
 
-    public bool hasDied { get; private set; }  = false;
+    public bool hasDied = false;
     
     public void SpawnEnemy()
     {
@@ -24,7 +24,6 @@ public class EnemySpawnPoint : MonoBehaviour
 
     public void SpawnPointReset()
     {
-        Destroy(enemy);
-        SpawnEnemy();
+        hasDied = false;
     }
 }
