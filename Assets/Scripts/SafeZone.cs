@@ -17,6 +17,7 @@ public class SafeZone : MonoBehaviour
                 
                 List<Transform> enemySpawnPoints = enemySpawnZone.spawnPoints;
                 
+                // Reset each spawn point
                 foreach (Transform spawnPoint in enemySpawnPoints)
                 {
                     spawnPoint.GetComponent<EnemySpawnPoint>().SpawnPointReset();

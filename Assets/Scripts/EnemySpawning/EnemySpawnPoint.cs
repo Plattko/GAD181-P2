@@ -13,7 +13,7 @@ public class EnemySpawnPoint : MonoBehaviour
     {
         hasDied = false;
 
-        enemy = Instantiate(enemyPrefab, transform.position, Quaternion.Euler(0f, 0f, 0f), transform);
+        enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity, transform);
         enemy.SetActive(false);
     }
 

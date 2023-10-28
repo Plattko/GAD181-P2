@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float currentHealth;
     
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         animator = GetComponentInChildren<Animator>();
         hurtbox = GetComponent<CapsuleCollider2D>();
@@ -25,19 +25,10 @@ public class Enemy : MonoBehaviour
         currentHealth = startingHealth;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Attack();
-        }
-    }
-
     private void OnEnable()
     {
         currentHealth = startingHealth;
-        
+
         if (!hurtbox.enabled)
         {
             hurtbox.enabled = true;
@@ -46,6 +37,15 @@ public class Enemy : MonoBehaviour
         if (!pushbox.enabled)
         {
             pushbox.enabled = true;
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Attack();
         }
     }
 
@@ -76,7 +76,7 @@ public class Enemy : MonoBehaviour
         EnemySpawnPoint spawnPoint = transform.parent.GetComponent<EnemySpawnPoint>();
         spawnPoint.EnemyDied();
 
-        Instantiate(potionPrefab, transform.position, Quaternion.Euler(0f, 0f, 0f));
+        Instantiate(potionPrefab, transform.position, Quaternion.identity);
 
         Debug.Log("Enemy died!");
     }
