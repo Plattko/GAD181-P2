@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Dash : MonoBehaviour
+public class Dash: MonoBehaviour
 {
     public float dashDistance = 5f;
     public float dashDuration = 0.2f;
@@ -28,7 +28,8 @@ public class Dash : MonoBehaviour
     {
         canDash = false;
 
-        //Obtains the direction in which the dash should occur.
+
+        //obtains the direction in which the dash should occur.
         Vector2 dashDirection = GetDashDirection();
         Vector2 startPos = rb.position;
         Vector2 endPos = startPos + dashDirection * dashDistance;
@@ -45,7 +46,7 @@ public class Dash : MonoBehaviour
 
         rb.velocity = Vector2.zero;
 
-        //introduces a cooldown period before the player can dash again.
+        //introduces a cooldown period before the player can dash again
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
@@ -55,10 +56,9 @@ public class Dash : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        //if there is no input, default to dashing in the direction the player is facing.
+        //if there is no input it defaults to dashing in the direction the player is facing.
         if (horizontalInput == 0 && verticalInput == 0)
         {
-
             //checks the player's facing direction and returns the appropriate Vector2 for dashing.
             if (Mathf.Approximately(transform.localScale.x, 1f))
                 return Vector2.right;
