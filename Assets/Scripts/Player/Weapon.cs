@@ -10,7 +10,6 @@ public class Weapon : MonoBehaviour
     [HideInInspector] public Animator animator;
     private Transform weaponPivot;
     private PolygonCollider2D attackCollider;
-    //private PlayerController playerController;
 
     private Vector2 pivotDirection;
     
@@ -23,7 +22,6 @@ public class Weapon : MonoBehaviour
         animator = GetComponent<Animator>();
         weaponPivot = transform.parent;
         attackCollider = weaponPivot.transform.GetChild(1).GetComponent<PolygonCollider2D>();
-        //playerController = GetComponentInParent<PlayerController>();
     }
 
     // Update is called once per frame
