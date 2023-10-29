@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class GoblinPatrolState : GoblinBaseState
 {
+    
     public override void EnterState(GoblinStateManager goblin)
     {
         Debug.Log("Entered the Patrol State!");
@@ -9,21 +10,22 @@ public class GoblinPatrolState : GoblinBaseState
 
     public override void UpdateState(GoblinStateManager goblin)
     {
-        // If player is not in range, patrol
+        // patrol
 
-        // Else, enter chase state
-        // goblin.SwitchState(goblin.ChaseState);
+        // If player enters aggro range, enter chase state
+        if ((goblin.playerTransform.position - goblin.transform.position).sqrMagnitude < goblin.aggroRangeSqr)
+        {
+            goblin.SwitchState(goblin.ChaseState);
+        }
 
-        // If currentHealth <= 0, enter dead state
-        // goblin.SwitchState(goblin.DeadState);
+        // If health reaches zero, enter dead state
+        if (goblin.currentHealth <= 0f)
+        {
+            goblin.SwitchState(goblin.DeadState);
+        }
     }
     public override void FixedUpdateState(GoblinStateManager goblin)
     {
         // Patrol physics
-    }
-
-    public override void OnCollisionEnter2D(GoblinStateManager goblin, Collision2D collision)
-    {
-
     }
 }

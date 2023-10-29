@@ -17,7 +17,7 @@ public class EnemyAttackHitbox : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
-            playerController.UpdateHealth(enemy.attackDMG);
+            playerController.UpdateHealth(enemy.atkDMG);
         }
     }
 }

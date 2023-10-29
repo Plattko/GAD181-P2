@@ -16,9 +16,4 @@ public class GoblinDeadState : GoblinBaseState
     {
         
     }
-
-    public override void OnCollisionEnter2D(GoblinStateManager goblin, Collision2D collision)
-    {
-
-    }
 }

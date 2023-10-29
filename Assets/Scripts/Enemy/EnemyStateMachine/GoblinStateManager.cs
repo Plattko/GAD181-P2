@@ -5,23 +5,27 @@ using UnityEngine;
 public class GoblinStateManager : MonoBehaviour
 {
     // Declare reference variables
-    private Animator animator;
+    [HideInInspector] public Rigidbody2D rb;
+    [HideInInspector] public Animator animator;
     private CapsuleCollider2D hurtbox;
     private CircleCollider2D pushbox;
     private Transform sprite;
-    private Transform playerTransform;
     public GameObject potionPrefab;
+    [HideInInspector] public Transform playerTransform;
 
     // Health variables
     public float startingHealth = 35f;
-    [SerializeField] private float currentHealth; // Serialized for debugging
+    public float currentHealth; // Serialized for debugging
     private bool isDead = false;
+    
+    // Aggro variables
+    private float aggroRange = 4f;
+    public float aggroRangeSqr;
+    [HideInInspector] public float moveSpeed = 4f;
 
     // Attack variables
     private float atkRange = 3f;
-    private float atkRangeSqr;
-    private float followRange = 4f;
-    private float followRangeSqr;
+    public float atkRangeSqr;
     private float atkCooldown = 1f;
     [HideInInspector] public int atkDMG = -10;
     [SerializeField] private bool canAttack = true; // Serialized for debugging
@@ -43,13 +47,14 @@ public class GoblinStateManager : MonoBehaviour
         sprite = transform.GetChild(0);
 
         currentHealth = startingHealth;
+        aggroRangeSqr = aggroRange * aggroRange;
         atkRangeSqr = atkRange * atkRange;
-        followRangeSqr = followRange * followRange;
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
         currentState = PatrolState;
@@ -61,17 +66,19 @@ public class GoblinStateManager : MonoBehaviour
     {
         currentState.UpdateState(this);
 
-        // Call handle rotation
+        if (rb.velocity.magnitude > 0f)
+        {
+            animator.SetBool("IsMoving", true);
+        }
+        else if (rb.velocity.magnitude > 0f)
+        {
+            animator.SetBool("IsMoving", false);
+        }
     }
 
     void FixedUpdate()
     {
         currentState.FixedUpdateState(this);
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        currentState.OnCollisionEnter2D(this, collision);
     }
 
     public void SwitchState(GoblinBaseState state)
@@ -80,16 +87,11 @@ public class GoblinStateManager : MonoBehaviour
         state.EnterState(this);
     }
 
-    // Handle the rotation of the enemy
-    void HandleRotation()
+    public void TakeDamage(float damage)
     {
-        // Rotate enemy based on movement direction when player isn't in range
-        // Rotate enemy based on player direction when player is in range
-    }
+        currentHealth -= damage;
+        animator.SetTrigger("Hurt");
 
-    public IEnumerator AttackCooldown()
-    {
-        yield return new WaitForSeconds(atkCooldown);
-        canAttack = true;
+        Debug.Log("<color=green>Enemy health is </color>" + currentHealth);
     }
 }
