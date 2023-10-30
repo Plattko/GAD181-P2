@@ -50,6 +50,20 @@ public class PlayerController : MonoBehaviour
         {
             UpdateHealth(10);
         }
+
+        // Update animator
+        bool isMoving = moveInput != Vector2.zero;
+
+        if (isMoving)
+        {
+            animator.SetFloat("Horizontal", moveInput.x);
+            animator.SetFloat("Vertical", moveInput.y);
+            animator.SetFloat("Speed", moveInput.sqrMagnitude);
+        }
+        else
+        {
+            animator.SetFloat("Speed", 0f);
+        }
     }
 
     private void FixedUpdate()
