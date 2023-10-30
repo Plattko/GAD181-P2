@@ -1,71 +1,122 @@
 using System.Collections;
 using UnityEngine;
 
-public class Dash: MonoBehaviour
+public class Dash : MonoBehaviour
 {
     public float dashDistance = 5f;
     public float dashDuration = 0.2f;
     public float dashCooldown = 2f;
 
     private bool canDash = true;
-
     private Rigidbody2D rb;
+    private Vector2 originalVelocity = Vector2.zero;
+
+    private bool isPressingW;
+    private bool isPressingA;
+    private bool isPressingS;
+    private bool isPressingD;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.velocity = Vector2.zero;
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        UpdateKeyPress();
+
+        if (canDash && Input.GetKeyDown(KeyCode.LeftShift))
         {
-            StartCoroutine(PerformDash());
+            //retrieves the direction for the dash based on the current input.
+            Vector2 dashDirection = GetDashDirection();
+
+            if (dashDirection != Vector2.zero)
+            {
+                originalVelocity = rb.velocity;
+
+                //initiates the dash action according to the determined dash direction.
+                StartCoroutine(PerformDash(dashDirection));
+            }
         }
     }
 
-    IEnumerator PerformDash()
+    IEnumerator PerformDash(Vector2 dashDirection)
     {
         canDash = false;
 
-
-        //obtains the direction in which the dash should occur.
-        Vector2 dashDirection = GetDashDirection();
         Vector2 startPos = rb.position;
+
+        //the target position for the dash.
         Vector2 endPos = startPos + dashDirection * dashDistance;
 
-        //records the starting time of the dash.
         float startTime = Time.time;
 
-        //moves the player from the starting position to the end position over the dash duration.
+        //loop to move the Rigidbody from the start to the end position over the dash duration.
         while (Time.time < startTime + dashDuration)
         {
+            //move the Rigidbody towards the end position based on the dash duration.
             rb.MovePosition(Vector2.Lerp(startPos, endPos, (Time.time - startTime) / dashDuration));
             yield return null;
         }
 
-        rb.velocity = Vector2.zero;
+        rb.velocity = originalVelocity;
 
-        //introduces a cooldown period before the player can dash again
+        //applies a cooldown period after the dash and re-enables the ability to dash.
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
 
+    void UpdateKeyPress()
+    {
+        //update the boolean flags to indicate whether each movement key is currently pressed or not.
+        isPressingW = Input.GetKey(KeyCode.W);
+        isPressingA = Input.GetKey(KeyCode.A);
+        isPressingS = Input.GetKey(KeyCode.S);
+        isPressingD = Input.GetKey(KeyCode.D);
+    }
+
     Vector2 GetDashDirection()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-
-        //if there is no input it defaults to dashing in the direction the player is facing.
-        if (horizontalInput == 0 && verticalInput == 0)
+        if (isPressingW)
         {
-            //checks the player's facing direction and returns the appropriate Vector2 for dashing.
-            if (Mathf.Approximately(transform.localScale.x, 1f))
-                return Vector2.right;
+            if (isPressingA)
+            {
+                return new Vector2(-1, 1).normalized; //up and left
+            }
+            else if (isPressingD)
+            {
+                return new Vector2(1, 1).normalized; //up and right
+            }
             else
-                return Vector2.left;
+            {
+                return new Vector2(0, 1).normalized; //up
+            }
+        }
+        else if (isPressingS)
+        {
+            if (isPressingA)
+            {
+                return new Vector2(-1, -1).normalized; //down and left
+            }
+            else if (isPressingD)
+            {
+                return new Vector2(1, -1).normalized; //down and right
+            }
+            else
+            {
+                return new Vector2(0, -1).normalized; //down
+            }
+        }
+        else if (isPressingA)
+        {
+            return new Vector2(-1, 0).normalized; //left
+        }
+        else if (isPressingD)
+        {
+            return new Vector2(1, 0).normalized; //right
         }
 
-        return new Vector2(horizontalInput, verticalInput).normalized;
+        return Vector2.zero;
     }
 }
