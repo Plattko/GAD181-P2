@@ -100,11 +100,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnMove(InputValue inputValue)
     {
-        //if (!isInShop)
-        //{
-        //    moveInput = inputValue.Get<Vector2>();
-        //}
-
         moveInput = inputValue.Get<Vector2>();
     }
 }
