@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     private Camera mainCamera;
+    private Transform attackHitbox;
     public HealthBar healthBar;
 
     // Movement variables
@@ -40,6 +41,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         mainCamera = Camera.main;
+        attackHitbox = transform.GetChild(2);
 
         currentHealth = startingHealth;
         healthBar.SetHealth(currentHealth, startingHealth);
@@ -135,6 +137,10 @@ public class PlayerController : MonoBehaviour
             if (canAttack)
             {
                 Vector2 direction = (mousePos - (Vector2)transform.position).normalized;
+                
+                Debug.Log("Horizontal value is: " + direction.x);
+                Debug.Log("Vertical value is: " + direction.y);
+                
                 animator.SetFloat("AttackHorizontal", direction.x);
                 animator.SetFloat("AttackVertical", direction.y);
                 animator.SetTrigger("Attack");
@@ -144,6 +150,32 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    public void AttackRightHitbox()
+    {
+        attackHitbox.localRotation = Quaternion.identity;
+        attackHitbox.localPosition = Vector2.zero;
+    }
+
+    public void AttackLeftHitbox()
+    {
+        Debug.Log("AttackLeftHitbox called.");
+        attackHitbox.localRotation = Quaternion.Euler(0, 180, 0);
+        attackHitbox.localPosition = Vector2.zero;
+    }
+
+    public void AttackUpHitbox()
+    {
+        attackHitbox.localRotation = Quaternion.Euler(0, 90, 0);
+        attackHitbox.localPosition = new Vector2(0.063f, 0.063f);
+    }
+
+    public void AttackDownHitbox()
+    {
+        attackHitbox.localRotation = Quaternion.Euler(0, 270, 0);
+        attackHitbox.localPosition = new Vector2(-0.189f, -0.189f);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
