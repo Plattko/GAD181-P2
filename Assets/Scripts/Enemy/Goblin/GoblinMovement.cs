@@ -28,6 +28,7 @@ public class GoblinMovement : MonoBehaviour
     public float chaseSpeed;
     private float distance;
 
+    public float separationRadius = 2.0f;
 
     void Start()
     {
@@ -47,6 +48,7 @@ public class GoblinMovement : MonoBehaviour
         if (CanSeePlayer)
         {
             Chase();
+            ApplySeparation();
         }
         else
         {
@@ -176,6 +178,21 @@ public class GoblinMovement : MonoBehaviour
         transform.position = Vector2.MoveTowards(this.transform.position, playerRef.transform.position, speed * Time.deltaTime);
         anim.SetBool("isRunning", true);
 
+    }
+    private void ApplySeparation()
+    {
+        GameObject[] goblins = GameObject.FindGameObjectsWithTag("Goblin"); //get all goblin game objects
+        foreach (GameObject goblin in goblins)
+        {
+            if (goblin != gameObject)
+            {
+                if (Vector2.Distance(transform.position, goblin.transform.position) < separationRadius)
+                {
+                    Vector2 separationDirection = (transform.position - goblin.transform.position).normalized;
+                    transform.Translate(separationDirection * speed * Time.deltaTime, Space.World);
+                }
+            }
+        }
     }
 
 }
