@@ -36,6 +36,11 @@ public class Enemy : MonoBehaviour
     {
         currentHealth = startingHealth;
 
+        if (!rb.simulated)
+        {
+            rb.simulated = true;
+        }
+
         if (!hurtbox.enabled)
         {
             hurtbox.enabled = true;
@@ -83,6 +88,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        rb.simulated = false;
         hurtbox.enabled = false;
         pushbox.enabled = false;
         goblinMovement.enabled = false;

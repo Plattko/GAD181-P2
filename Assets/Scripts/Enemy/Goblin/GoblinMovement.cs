@@ -33,6 +33,7 @@ public class GoblinMovement : MonoBehaviour
 
     // Direction to move
     private Vector2 moveDirection;
+    private bool hasTargetPosition;
 
     void Start()
     {
@@ -83,6 +84,18 @@ public class GoblinMovement : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (hasTargetPosition)
+        {
+            rb.velocity = moveDirection * speed;
+        }
+        else
+        {
+            rb.velocity = Vector2.zero;
+        }
+    }
+
     private void HandleRotation()
     {
         //flip the sprite based on the movement direction
@@ -97,24 +110,31 @@ public class GoblinMovement : MonoBehaviour
     }
 
     private void Patrol()
-    {
+    {        
         Vector2 targetPosition = patrolPoints[randomPatrolPoint].position;
-        Vector2 currentPosition = transform.position;
+        Vector2 position = transform.position;
 
-        moveDirection = (targetPosition - currentPosition).normalized;
+        moveDirection = (targetPosition - position).normalized;
 
-        //move the goblin
-        transform.position = Vector2.MoveTowards(currentPosition, targetPosition, speed * Time.deltaTime);
+        // Move the goblin
 
-        if (Vector2.Distance(currentPosition, targetPosition) < 0.2f)
+        //transform.position = Vector2.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+
+        if ((targetPosition - position).sqrMagnitude > 0.01f)
+        {
+            hasTargetPosition = true;
+        }
+        else if ((targetPosition - position).sqrMagnitude < 0.01f)
         {
             if (waitTime <= 0)
             {
                 randomPatrolPoint = Random.Range(0, patrolPoints.Count);
                 waitTime = startWaitTime;
+                hasTargetPosition = true;
             }
             else
             {
+                hasTargetPosition = false;
                 waitTime -= Time.deltaTime;
             }
         }
@@ -123,9 +143,10 @@ public class GoblinMovement : MonoBehaviour
     private void Chase()
     {
         moveDirection = (playerTransform.position - transform.position).normalized;
-        float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
 
-        transform.position = Vector2.MoveTowards(this.transform.position, playerTransform.position, chaseSpeed * Time.deltaTime);
+        hasTargetPosition = true;
+
+        //transform.position = Vector2.MoveTowards(this.transform.position, playerTransform.position, chaseSpeed * Time.deltaTime);
     }
 
     private void ApplySeparation()
