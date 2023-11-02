@@ -5,27 +5,27 @@ using UnityEngine.EventSystems;
 
 public class GoblinMovement : MonoBehaviour
 {
+    // Get reference variables
+    private Rigidbody2D rb;
+    private Transform playerTransform;
+
     [Header("FOV Variables")]
     public float radius = 5;
     [Range(1, 360)] public float angle = 45;
     public LayerMask targetLayer;
     public LayerMask obstructionLayer;
-    public Transform playerTransform;
     public bool CanSeePlayer { get; private set; }
 
     [Header("Patrol Variables")]
+    private List<Transform> patrolPoints = new List<Transform>();
     public float speed;
-    private float waitTime;
     public float startWaitTime;
+    private float waitTime;
 
-    private Rigidbody2D rb;
-
-    public List<Transform> patrolPoints = new List<Transform>();
     private int randomPatrolPoint;
 
     [Header("Chase Variables")]
     public float chaseSpeed;
-
     public float separationRadius = 2.0f;
 
     // Direction to move
@@ -33,16 +33,15 @@ public class GoblinMovement : MonoBehaviour
 
     void Start()
     {
-        //fov//
+        // Set reference variables
+        rb = GetComponent<Rigidbody2D>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        StartCoroutine(FOVCheck());
-
-        //patrol//
+        
+        // Set patrol points
         Transform spawnPoint = transform.parent;
         int noOfPatrolPoints = spawnPoint.childCount - 1;
         int index = 0;
 
-        // Get all the patrol points
         for (int i = 0; i < noOfPatrolPoints; i++)
         {
             Transform patrolPoint = spawnPoint.GetChild(index);
@@ -51,9 +50,11 @@ public class GoblinMovement : MonoBehaviour
         }
 
         randomPatrolPoint = Random.Range(0, (patrolPoints.Count - 1));
-        rb = GetComponent<Rigidbody2D>();
 
+        // Start FOV check
+        StartCoroutine(FOVCheck());
     }
+
     private void Update()
     {
         HandleRotation();
@@ -84,7 +85,6 @@ public class GoblinMovement : MonoBehaviour
 
     private void Patrol()
     {
-        
         Vector2 targetPosition = patrolPoints[randomPatrolPoint].position;
         Vector2 currentPosition = transform.position;
 
