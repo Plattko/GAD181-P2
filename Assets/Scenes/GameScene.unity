@@ -45712,7 +45712,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1922999685}
   - component: {fileID: 1922999686}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46186,7 +46186,7 @@ GameObject:
   - component: {fileID: 409810942476537287}
   - component: {fileID: 409810942476537286}
   - component: {fileID: 409810942476537285}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46289,7 +46289,7 @@ GameObject:
   m_Component:
   - component: {fileID: 409810942591988391}
   - component: {fileID: 409810942591988390}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PushCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46355,7 +46355,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 409810944058487131}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WeaponPivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46404,7 +46404,7 @@ GameObject:
   m_Component:
   - component: {fileID: 409810944076003296}
   - component: {fileID: 409810944076003303}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: AttackCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
