@@ -10,7 +10,7 @@ public class GoblinMovement : MonoBehaviour
     [Range(1, 360)] public float angle = 45;
     public LayerMask targetLayer;
     public LayerMask obstructionLayer;
-    public GameObject playerRef;
+    public Transform playerTransform;
     public bool CanSeePlayer { get; private set; }
 
     [Header("Patrol Variables")]
@@ -21,8 +21,8 @@ public class GoblinMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
 
-    public Transform[] moveSpots;
-    private int randomSpot;
+    public List<Transform> patrolPoints = new List<Transform>();
+    private int randomPatrolPoint;
 
     [Header("Chase Variables")]
     public float chaseSpeed;
@@ -33,11 +33,23 @@ public class GoblinMovement : MonoBehaviour
     void Start()
     {
         //fov//
-        playerRef = GameObject.FindGameObjectWithTag("Player");
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         StartCoroutine(FOVCheck());
 
         //patrol//
-        randomSpot = Random.Range(0, moveSpots.Length);
+        Transform spawnPoint = transform.parent;
+        int noOfPatrolPoints = spawnPoint.childCount - 1;
+        int index = 0;
+
+        // Get all the patrol points
+        for (int i = 0; i < noOfPatrolPoints; i++)
+        {
+            Transform patrolPoint = spawnPoint.GetChild(index);
+            patrolPoints.Add(patrolPoint);
+            index++;
+        }
+
+        randomPatrolPoint = Random.Range(0, (patrolPoints.Count - 1));
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
         anim.SetBool("isRunning", true);
@@ -58,7 +70,8 @@ public class GoblinMovement : MonoBehaviour
 
     private void Patrol()
     {
-        Vector2 targetPosition = moveSpots[randomSpot].position;
+        
+        Vector2 targetPosition = patrolPoints[randomPatrolPoint].position;
         Vector2 currentPosition = transform.position;
 
         Vector2 moveDirection = (targetPosition - currentPosition).normalized;
@@ -80,7 +93,7 @@ public class GoblinMovement : MonoBehaviour
         {
             if (waitTime <= 0)
             {
-                randomSpot = Random.Range(0, moveSpots.Length);
+                randomPatrolPoint = Random.Range(0, patrolPoints.Count);
                 waitTime = startWaitTime;
                 anim.SetBool("isRunning", true);
             }
@@ -91,7 +104,9 @@ public class GoblinMovement : MonoBehaviour
             }
         }
     }
+    
     /////////////////////////////////////////////////////FOV//////////////////////////////////////////////////////////////////////////////////////
+    
     private IEnumerator FOVCheck()
     {
         WaitForSeconds wait = new WaitForSeconds(0.2f);
@@ -147,7 +162,7 @@ public class GoblinMovement : MonoBehaviour
         if (CanSeePlayer)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, playerRef.transform.position);
+            Gizmos.DrawLine(transform.position, playerTransform.position);
         }
     }
     private Vector2 DirectionFromAngle(float eulerY, float angleInDegrees)
@@ -156,12 +171,13 @@ public class GoblinMovement : MonoBehaviour
 
         return new Vector2(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
+    
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void Chase()
     {
-        distance = Vector2.Distance(transform.position, playerRef.transform.position);
-        Vector2 direction = playerRef.transform.position - transform.position;
+        distance = Vector2.Distance(transform.position, playerTransform.position);
+        Vector2 direction = playerTransform.position - transform.position;
         direction.Normalize();
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
@@ -175,13 +191,14 @@ public class GoblinMovement : MonoBehaviour
             transform.localScale = new Vector3(-1, 1, 1); //flipping the sprite
         }
 
-        transform.position = Vector2.MoveTowards(this.transform.position, playerRef.transform.position, speed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(this.transform.position, playerTransform.position, speed * Time.deltaTime);
         anim.SetBool("isRunning", true);
 
     }
+
     private void ApplySeparation()
     {
-        GameObject[] goblins = GameObject.FindGameObjectsWithTag("Goblin"); //get all goblin game objects
+        GameObject[] goblins = GameObject.FindGameObjectsWithTag("Enemy"); //get all enemy game objects
         foreach (GameObject goblin in goblins)
         {
             if (goblin != gameObject)
