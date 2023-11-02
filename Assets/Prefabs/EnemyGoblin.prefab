@@ -178,25 +178,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b11ebb9125120948a827fd0d4aca4fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 8
-  angle: 160
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  obstructionLayer:
-    serializedVersion: 2
-    m_Bits: 1024
-  playerRef: {fileID: 409810944236859497, guid: a78da050106e9084388baa3aadb11883, type: 3}
+  playerTransform: {fileID: 409810944236859496, guid: a78da050106e9084388baa3aadb11883, type: 3}
   speed: 5
   startWaitTime: 2
-  moveSpots:
-  - {fileID: 4348758311445271788, guid: 488dbc55f1ef190468fcc6b9b9bcd7cb, type: 3}
-  - {fileID: 4348758311445271788, guid: d6798af12f51d6c4e929caf7c1d2f829, type: 3}
-  - {fileID: 4348758311445271788, guid: 098d2f6bcd6a7364596927457fd2ac72, type: 3}
-  - {fileID: 4348758311445271788, guid: 45f8c42faabcc2c499c290b06703e563, type: 3}
-  - {fileID: 4348758311445271788, guid: 19d949a667d04de499adc672a6db9bc9, type: 3}
-  - {fileID: 4348758311445271788, guid: d57cfe4ac717cd34590ba9ba88dcf746, type: 3}
+  patrolPoints: []
   chaseSpeed: 5
+  separationRadius: 2
 --- !u!114 &1985033090430112592
 MonoBehaviour:
   m_ObjectHideFlags: 0

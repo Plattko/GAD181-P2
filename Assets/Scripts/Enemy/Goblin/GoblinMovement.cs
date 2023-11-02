@@ -5,11 +5,6 @@ using UnityEngine.EventSystems;
 
 public class GoblinMovement : MonoBehaviour
 {
-    [Header("FOV Variables")]
-    public float radius = 5;
-    [Range(1, 360)] public float angle = 45;
-    public LayerMask targetLayer;
-    public LayerMask obstructionLayer;
     public Transform playerTransform;
     public bool CanSeePlayer { get; private set; }
 
@@ -20,6 +15,7 @@ public class GoblinMovement : MonoBehaviour
 
     private Rigidbody2D rb;
     private Animator anim;
+    private CircleCollider2D awarenessCollider;
 
     public List<Transform> patrolPoints = new List<Transform>();
     private int randomPatrolPoint;
@@ -32,9 +28,7 @@ public class GoblinMovement : MonoBehaviour
 
     void Start()
     {
-        //fov//
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        StartCoroutine(FOVCheck());
 
         //patrol//
         Transform spawnPoint = transform.parent;
@@ -54,6 +48,17 @@ public class GoblinMovement : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         anim.SetBool("isRunning", true);
 
+        Transform childCollider = transform.Find("AgroRange");
+        awarenessCollider = childCollider.GetComponent<CircleCollider2D>();
+
+
+        if (awarenessCollider != null)
+        {
+            awarenessCollider.isTrigger = true;
+            awarenessCollider.radius = 10.0f;
+        }
+
+        Debug.Log("all start code has been run");
     }
     private void Update()
     {
@@ -68,111 +73,69 @@ public class GoblinMovement : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            CanSeePlayer = true;
+            Debug.Log("The player is being seen");
+        }
+        else
+        {
+            Debug.Log("Something entered goblin's trigger but it's not the player");
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            CanSeePlayer = false;
+            Debug.Log("The player isnt seen");
+        }
+        else
+        {
+            Debug.Log("Something exited goblin's trigger but it's not the player");
+        }
+    }
+
     private void Patrol()
     {
-        
-        Vector2 targetPosition = patrolPoints[randomPatrolPoint].position;
-        Vector2 currentPosition = transform.position;
 
-        Vector2 moveDirection = (targetPosition - currentPosition).normalized;
+            Vector2 targetPosition = patrolPoints[randomPatrolPoint].position;
+            Vector2 currentPosition = transform.position;
 
-        //flip the sprite based on the movement direction
-        if (moveDirection.x > 0)  //right
-        {
-            transform.localScale = new Vector3(1, 1, 1); //no flipping
-        }
-        else if (moveDirection.x < 0)  //left
-        {
-            transform.localScale = new Vector3(-1, 1, 1); //flipping the sprite
-        }
+            Vector2 moveDirection = (targetPosition - currentPosition).normalized;
 
-        //move the goblin
-        transform.position = Vector2.MoveTowards(currentPosition, targetPosition, speed * Time.deltaTime);
-
-        if (Vector2.Distance(currentPosition, targetPosition) < 0.2f)
-        {
-            if (waitTime <= 0)
+            //flip the sprite based on the movement direction
+            if (moveDirection.x > 0)  //right
             {
-                randomPatrolPoint = Random.Range(0, patrolPoints.Count);
-                waitTime = startWaitTime;
-                anim.SetBool("isRunning", true);
+                transform.localScale = new Vector3(1, 1, 1); //no flipping
             }
-            else
+            else if (moveDirection.x < 0)  //left
             {
-                waitTime -= Time.deltaTime;
-                anim.SetBool("isRunning", false);
+                transform.localScale = new Vector3(-1, 1, 1); //flipping the sprite
             }
-        }
-    }
-    
-    /////////////////////////////////////////////////////FOV//////////////////////////////////////////////////////////////////////////////////////
-    
-    private IEnumerator FOVCheck()
-    {
-        WaitForSeconds wait = new WaitForSeconds(0.2f);
 
-        while (true)
-        {
-            yield return wait;
-            FOV();
-        }
-    }
-    private void FOV()
-    {
-        Collider2D[] rangeCheck = Physics2D.OverlapCircleAll(transform.position, radius, targetLayer);
+            //move the goblin
+            transform.position = Vector2.MoveTowards(currentPosition, targetPosition, speed * Time.deltaTime);
 
-        if (rangeCheck.Length > 0)
-        {
-            Transform target = rangeCheck[0].transform;
-            Vector2 directionToTarget = (target.position - transform.position).normalized;
-
-            Vector2 facingDirection = transform.localScale.x > 0 ? transform.right : -transform.right;
-
-            float angleToTarget = Vector2.Angle(facingDirection, directionToTarget);
-
-            if (angleToTarget < angle / 2)
+            if (Vector2.Distance(currentPosition, targetPosition) < 0.2f)
             {
-                float distanceToTarget = Vector2.Distance(transform.position, target.position);
-
-                if (!Physics2D.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionLayer))
-                    CanSeePlayer = true;
+                if (waitTime <= 0)
+                {
+                    randomPatrolPoint = Random.Range(0, patrolPoints.Count);
+                    waitTime = startWaitTime;
+                    anim.SetBool("isRunning", true);
+                }
                 else
-                    CanSeePlayer = false;
+                {
+                    waitTime -= Time.deltaTime;
+                    anim.SetBool("isRunning", false);
+                }
             }
-            else
-                CanSeePlayer = false;
-        }
-        else if (CanSeePlayer)
-            CanSeePlayer = false;
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.white;
-        UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.forward, radius);
-
-        Vector3 facingDirection = transform.localScale.x > 0 ? transform.right : -transform.right;
-
-        Vector3 angle01 = Quaternion.AngleAxis(-angle / 2, Vector3.forward) * facingDirection;
-        Vector3 angle02 = Quaternion.AngleAxis(angle / 2, Vector3.forward) * facingDirection;
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(transform.position, transform.position + angle01 * radius);
-        Gizmos.DrawLine(transform.position, transform.position + angle02 * radius);
-
-        if (CanSeePlayer)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, playerTransform.position);
-        }
-    }
-    private Vector2 DirectionFromAngle(float eulerY, float angleInDegrees)
-    {
-        angleInDegrees += eulerY;
-
-        return new Vector2(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void Chase()
     {
