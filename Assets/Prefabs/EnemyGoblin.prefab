@@ -225,11 +225,9 @@ MonoBehaviour:
   obstructionLayer:
     serializedVersion: 2
     m_Bits: 1024
-  playerTransform: {fileID: 0}
   speed: 5
   startWaitTime: 2
-  patrolPoints: []
-  chaseSpeed: 5
+  chaseSpeed: 3
   separationRadius: 2
 --- !u!1 &1985033090522305026
 GameObject:
