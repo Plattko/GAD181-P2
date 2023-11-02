@@ -19,16 +19,17 @@ public class GoblinMovement : MonoBehaviour
     public float startWaitTime;
 
     private Rigidbody2D rb;
-    private Animator anim;
 
     public List<Transform> patrolPoints = new List<Transform>();
     private int randomPatrolPoint;
 
     [Header("Chase Variables")]
     public float chaseSpeed;
-    private float distance;
 
     public float separationRadius = 2.0f;
+
+    // Direction to move
+    private Vector2 moveDirection;
 
     void Start()
     {
@@ -51,12 +52,12 @@ public class GoblinMovement : MonoBehaviour
 
         randomPatrolPoint = Random.Range(0, (patrolPoints.Count - 1));
         rb = GetComponent<Rigidbody2D>();
-        anim = GetComponentInChildren<Animator>();
-        anim.SetBool("isRunning", true);
 
     }
     private void Update()
     {
+        HandleRotation();
+        
         if (CanSeePlayer)
         {
             Chase();
@@ -68,14 +69,8 @@ public class GoblinMovement : MonoBehaviour
         }
     }
 
-    private void Patrol()
+    private void HandleRotation()
     {
-        
-        Vector2 targetPosition = patrolPoints[randomPatrolPoint].position;
-        Vector2 currentPosition = transform.position;
-
-        Vector2 moveDirection = (targetPosition - currentPosition).normalized;
-
         //flip the sprite based on the movement direction
         if (moveDirection.x > 0)  //right
         {
@@ -85,6 +80,15 @@ public class GoblinMovement : MonoBehaviour
         {
             transform.localScale = new Vector3(-1, 1, 1); //flipping the sprite
         }
+    }
+
+    private void Patrol()
+    {
+        
+        Vector2 targetPosition = patrolPoints[randomPatrolPoint].position;
+        Vector2 currentPosition = transform.position;
+
+        moveDirection = (targetPosition - currentPosition).normalized;
 
         //move the goblin
         transform.position = Vector2.MoveTowards(currentPosition, targetPosition, speed * Time.deltaTime);
@@ -95,12 +99,10 @@ public class GoblinMovement : MonoBehaviour
             {
                 randomPatrolPoint = Random.Range(0, patrolPoints.Count);
                 waitTime = startWaitTime;
-                anim.SetBool("isRunning", true);
             }
             else
             {
                 waitTime -= Time.deltaTime;
-                anim.SetBool("isRunning", false);
             }
         }
     }
@@ -176,24 +178,10 @@ public class GoblinMovement : MonoBehaviour
 
     private void Chase()
     {
-        distance = Vector2.Distance(transform.position, playerTransform.position);
-        Vector2 direction = playerTransform.position - transform.position;
-        direction.Normalize();
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-        //flip the sprite based on the movement direction
-        if (direction.x > 0)  //right
-        {
-            transform.localScale = new Vector3(1, 1, 1); //no flipping
-        }
-        else if (direction.x < 0)  //left
-        {
-            transform.localScale = new Vector3(-1, 1, 1); //flipping the sprite
-        }
+        moveDirection = (playerTransform.position - transform.position).normalized;
+        float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
 
         transform.position = Vector2.MoveTowards(this.transform.position, playerTransform.position, speed * Time.deltaTime);
-        anim.SetBool("isRunning", true);
-
     }
 
     private void ApplySeparation()

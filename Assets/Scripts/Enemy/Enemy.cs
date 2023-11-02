@@ -5,9 +5,11 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     // Get reference variables
+    private Rigidbody2D rb;
     private Animator animator;
     private CapsuleCollider2D hurtbox;
     private CircleCollider2D pushbox;
+    private GoblinMovement goblinMovement;
     public GameObject potionPrefab;
     
     // Health variables
@@ -21,9 +23,11 @@ public class Enemy : MonoBehaviour
     void Awake()
     {
         // Set reference variables
+        rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         hurtbox = GetComponent<CapsuleCollider2D>();
         pushbox = GetComponentInChildren<CircleCollider2D>();
+        goblinMovement = GetComponent<GoblinMovement>();
 
         currentHealth = startingHealth;
     }
@@ -41,6 +45,11 @@ public class Enemy : MonoBehaviour
         {
             pushbox.enabled = true;
         }
+
+        if (!goblinMovement.enabled)
+        {
+            goblinMovement.enabled = true;
+        }
     }
 
     // Update is called once per frame
@@ -50,6 +59,8 @@ public class Enemy : MonoBehaviour
         {
             Attack();
         }
+
+        animator.SetFloat("Speed", rb.velocity.magnitude);
     }
 
     public void TakeDamage(float damage)
@@ -74,6 +85,7 @@ public class Enemy : MonoBehaviour
     {
         hurtbox.enabled = false;
         pushbox.enabled = false;
+        goblinMovement.enabled = false;
         animator.SetBool("IsDead", true);
 
         EnemySpawnPoint spawnPoint = transform.parent.GetComponent<EnemySpawnPoint>();
