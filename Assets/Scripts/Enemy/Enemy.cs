@@ -4,21 +4,24 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    // Get reference variables
     private Animator animator;
     private CapsuleCollider2D hurtbox;
     private CircleCollider2D pushbox;
-
     public GameObject potionPrefab;
     
-    [HideInInspector] public int attackDMG = -10;
-    
+    // Health variables
     public float startingHealth = 35f;
     [SerializeField] private float currentHealth;
-    
+
+    // Attack variables
+    [HideInInspector] public int attackDMG = -10;
+
     // Start is called before the first frame update
     void Awake()
     {
-        animator = GetComponentInChildren<Animator>();
+        // Set reference variables
+        animator = GetComponent<Animator>();
         hurtbox = GetComponent<CapsuleCollider2D>();
         pushbox = GetComponentInChildren<CircleCollider2D>();
 

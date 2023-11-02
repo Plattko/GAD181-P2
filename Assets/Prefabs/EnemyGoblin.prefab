@@ -78,8 +78,8 @@ GameObject:
   - component: {fileID: 1985033090430112595}
   - component: {fileID: 1985033090430112593}
   - component: {fileID: 1985033090430112594}
-  - component: {fileID: 7883457777293000623}
   - component: {fileID: 1985033090430112592}
+  - component: {fileID: 7883457777293000623}
   m_Layer: 7
   m_Name: EnemyGoblin
   m_TagString: Enemy
@@ -101,6 +101,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1985033091579455988}
+  - {fileID: 1985033090522305027}
   - {fileID: 1985033089928990583}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -166,6 +167,22 @@ CapsuleCollider2D:
   m_Offset: {x: -0.060560465, y: 0.75017893}
   m_Size: {x: 0.8652272, y: 1.340852}
   m_Direction: 0
+--- !u!114 &1985033090430112592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985033090430112596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 303ad455703969a4cab96096427354da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  potionPrefab: {fileID: 948738515046094201, guid: 0b06512c92fb5814382bda8acd449fd5, type: 3}
+  attackDMG: -10
+  startingHealth: 35
+  currentHealth: 0
 --- !u!114 &7883457777293000623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,33 +203,12 @@ MonoBehaviour:
   obstructionLayer:
     serializedVersion: 2
     m_Bits: 1024
-  playerRef: {fileID: 409810944236859497, guid: a78da050106e9084388baa3aadb11883, type: 3}
+  playerTransform: {fileID: 0}
   speed: 5
   startWaitTime: 2
-  moveSpots:
-  - {fileID: 4348758311445271788, guid: 488dbc55f1ef190468fcc6b9b9bcd7cb, type: 3}
-  - {fileID: 4348758311445271788, guid: d6798af12f51d6c4e929caf7c1d2f829, type: 3}
-  - {fileID: 4348758311445271788, guid: 098d2f6bcd6a7364596927457fd2ac72, type: 3}
-  - {fileID: 4348758311445271788, guid: 45f8c42faabcc2c499c290b06703e563, type: 3}
-  - {fileID: 4348758311445271788, guid: 19d949a667d04de499adc672a6db9bc9, type: 3}
-  - {fileID: 4348758311445271788, guid: d57cfe4ac717cd34590ba9ba88dcf746, type: 3}
+  patrolPoints: []
   chaseSpeed: 5
---- !u!114 &1985033090430112592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1985033090430112596}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 303ad455703969a4cab96096427354da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  potionPrefab: {fileID: 948738515046094201, guid: 0b06512c92fb5814382bda8acd449fd5, type: 3}
-  attackDMG: -10
-  startingHealth: 35
-  currentHealth: 0
+  separationRadius: 2
 --- !u!1 &1985033090522305026
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,12 +235,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1985033090522305026}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1985033091579455988}
+  m_Father: {fileID: 1985033090430112595}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1985033090522305024
 BoxCollider2D:
@@ -333,8 +329,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1985033090522305027}
+  m_Children: []
   m_Father: {fileID: 1985033090430112595}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1985033091579455986
