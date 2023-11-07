@@ -7,7 +7,7 @@ public class GoblinMovement : MonoBehaviour
 {
     // Get reference variables
     private Rigidbody2D rb;
-    private Transform playerTransform;
+    public Transform playerTransform;
 
     [Header("FOV Variables")]
     public float radius = 5;
@@ -34,6 +34,8 @@ public class GoblinMovement : MonoBehaviour
     // Direction to move
     private Vector2 moveDirection;
     private bool hasTargetPosition;
+
+    public bool canMove = true;
 
     void Start()
     {
@@ -86,9 +88,16 @@ public class GoblinMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (hasTargetPosition)
+        if (canMove)
         {
-            rb.velocity = moveDirection * speed;
+            if (hasTargetPosition)
+            {
+                rb.velocity = moveDirection * speed;
+            }
+            else
+            {
+                rb.velocity = Vector2.zero;
+            }
         }
         else
         {
@@ -163,5 +172,14 @@ public class GoblinMovement : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void SetCanMoveFalse()
+    {
+        canMove = false;
+    }
+    public void SetCanMoveTrue()
+    {
+        canMove = true;
     }
 }

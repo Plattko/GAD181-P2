@@ -15,9 +15,16 @@ public class Enemy : MonoBehaviour
     // Health variables
     public float startingHealth = 35f;
     [SerializeField] private float currentHealth;
+    private bool isDead = false;
 
     // Attack variables
     [HideInInspector] public int attackDMG = -10;
+    private float atkRange = 1.5f;
+    private float atkRangeSqr;
+    
+    private bool canAttack = true;
+    private float atkCooldown = 2f;
+    private float atkCooldownTimer;
 
     // Start is called before the first frame update
     void Awake()
@@ -30,11 +37,13 @@ public class Enemy : MonoBehaviour
         goblinMovement = GetComponent<GoblinMovement>();
 
         currentHealth = startingHealth;
+        atkRangeSqr = atkRange * atkRange;
     }
 
     private void OnEnable()
     {
         currentHealth = startingHealth;
+        goblinMovement.canMove = true;
 
         if (!rb.simulated)
         {
@@ -66,6 +75,21 @@ public class Enemy : MonoBehaviour
         }
 
         animator.SetFloat("Speed", rb.velocity.magnitude);
+
+        if ((goblinMovement.playerTransform.position - transform.position).sqrMagnitude < atkRangeSqr && canAttack && !isDead)
+        {
+            Attack();
+        }
+
+        if (!canAttack)
+        {
+            atkCooldownTimer -= Time.deltaTime;
+
+            if (atkCooldownTimer <= 0)
+            {
+                canAttack = true;
+            }
+        }
     }
 
     public void TakeDamage(float damage)
@@ -84,10 +108,15 @@ public class Enemy : MonoBehaviour
     private void Attack()
     {
         animator.SetTrigger("Attack");
+
+        Debug.Log("Called attack animation");
+        atkCooldownTimer = atkCooldown;
+        canAttack = false;
     }
 
     private void Die()
     {
+        isDead = true;
         rb.simulated = false;
         hurtbox.enabled = false;
         pushbox.enabled = false;

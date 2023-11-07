@@ -58,14 +58,14 @@ public class PlayerController : MonoBehaviour
         }
 
         // Debugging
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            UpdateHealth(-20);
-        }
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            UpdateHealth(10);
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    UpdateHealth(-20);
+        //}
+        //if (Input.GetKeyDown(KeyCode.LeftControl))
+        //{
+        //    UpdateHealth(10);
+        //}
     }
 
     private void FixedUpdate()

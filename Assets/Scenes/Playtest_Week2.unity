@@ -21001,6 +21001,67 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3028667844461594288, guid: b3d69433f9c149d45ac9423b83a180dd, type: 3}
   m_PrefabInstance: {fileID: 1282517950}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1290192709
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1985033090430112595, guid: 0916ed2833860884990fa7847e58aadd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.4501243
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985033090430112595, guid: 0916ed2833860884990fa7847e58aadd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.7824977
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985033090430112595, guid: 0916ed2833860884990fa7847e58aadd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985033090430112595, guid: 0916ed2833860884990fa7847e58aadd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985033090430112595, guid: 0916ed2833860884990fa7847e58aadd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985033090430112595, guid: 0916ed2833860884990fa7847e58aadd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985033090430112595, guid: 0916ed2833860884990fa7847e58aadd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985033090430112595, guid: 0916ed2833860884990fa7847e58aadd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985033090430112595, guid: 0916ed2833860884990fa7847e58aadd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985033090430112595, guid: 0916ed2833860884990fa7847e58aadd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985033090430112596, guid: 0916ed2833860884990fa7847e58aadd, type: 3}
+      propertyPath: m_Name
+      value: EnemyGoblin
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985033090430112596, guid: 0916ed2833860884990fa7847e58aadd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0916ed2833860884990fa7847e58aadd, type: 3}
 --- !u!1 &1309313243
 GameObject:
   m_ObjectHideFlags: 0
@@ -23132,3 +23193,4 @@ SceneRoots:
   - {fileID: 213949667}
   - {fileID: 796085868}
   - {fileID: 1063652800}
+  - {fileID: 1290192709}
