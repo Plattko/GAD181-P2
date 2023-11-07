@@ -38,18 +38,18 @@ public class Shop : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (inFrontOfShop)
+        if (Input.GetKeyDown(KeyCode.F) && shopUI.activeSelf)
         {
+            shopUI.SetActive(false);
+            playerController.isInShop = false;
+        }
+        else if (inFrontOfShop)
+        {
+            //Debug.Log("Is in front of shop");
             if (Input.GetKeyDown(KeyCode.F) && !shopUI.activeSelf)
             {
                 shopUI.SetActive(true);
                 playerController.isInShop = true;
-
-            }
-            else if (Input.GetKeyDown(KeyCode.F) && shopUI.activeSelf)
-            {
-                shopUI.SetActive(false);
-                playerController.isInShop = false;
             }
         }
     }
