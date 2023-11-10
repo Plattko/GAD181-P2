@@ -43,6 +43,7 @@ public class Enemy : MonoBehaviour
     {
         currentHealth = startingHealth;
         goblinMovement.canMove = true;
+        isDead = false;
 
         if (!rb.simulated)
         {

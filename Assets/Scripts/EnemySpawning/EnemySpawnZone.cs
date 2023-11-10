@@ -43,6 +43,7 @@ public class EnemySpawnZone : MonoBehaviour
             if (enemySpawnPoint.enemy.activeSelf)
             {
                 enemySpawnPoint.enemy.SetActive(false);
+                enemySpawnPoint.enemy.transform.position = spawnPoint.position;
             }
         }
     }
