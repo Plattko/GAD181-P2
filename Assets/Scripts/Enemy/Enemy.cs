@@ -18,13 +18,12 @@ public class Enemy : MonoBehaviour
     private bool isDead = false;
 
     // Attack variables
-    [HideInInspector] public int attackDMG = -10;
-    private float atkRange = 1.5f;
+    public int attackDMG = -20;
+    private float atkRange = 1.25f;
     private float atkRangeSqr;
     
-    private bool canAttack = true;
-    private float atkCooldown = 2f;
-    private float atkCooldownTimer;
+    private float atkCooldown = 1f;
+    private float nextAttackAllowed;
 
     // Start is called before the first frame update
     void Awake()
@@ -69,25 +68,16 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
+        if (!isDead)
         {
-            Attack();
-        }
+            animator.SetFloat("Speed", rb.velocity.magnitude);
 
-        animator.SetFloat("Speed", rb.velocity.magnitude);
-
-        if ((goblinMovement.playerTransform.position - transform.position).sqrMagnitude < atkRangeSqr && canAttack && !isDead)
-        {
-            Attack();
-        }
-
-        if (!canAttack)
-        {
-            atkCooldownTimer -= Time.deltaTime;
-
-            if (atkCooldownTimer <= 0)
+            if ((goblinMovement.playerTransform.position - transform.position).sqrMagnitude < atkRangeSqr)
             {
-                canAttack = true;
+                if (Time.time > nextAttackAllowed)
+                {
+                    Attack();
+                }
             }
         }
     }
@@ -95,8 +85,6 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        animator.SetTrigger("Hurt");
-
         Debug.Log("<color=green>Enemy health is </color>" + currentHealth);
 
         if (currentHealth <= 0)
@@ -108,20 +96,18 @@ public class Enemy : MonoBehaviour
     private void Attack()
     {
         animator.SetTrigger("Attack");
-
-        Debug.Log("Called attack animation");
-        atkCooldownTimer = atkCooldown;
-        canAttack = false;
+        nextAttackAllowed = Time.time + atkCooldown;
     }
 
     private void Die()
     {
+        animator.SetTrigger("Death");
         isDead = true;
+
         rb.simulated = false;
         hurtbox.enabled = false;
         pushbox.enabled = false;
         goblinMovement.enabled = false;
-        animator.SetBool("IsDead", true);
 
         EnemySpawnPoint spawnPoint = transform.parent.GetComponent<EnemySpawnPoint>();
         spawnPoint.EnemyDied();
