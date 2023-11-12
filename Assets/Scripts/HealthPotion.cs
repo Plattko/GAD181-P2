@@ -6,7 +6,7 @@ public class HealthPotion : MonoBehaviour
 {
     public float attractDistance = 3.5f;
     private float attractDistanceSqr;
-    public float attractSpeed = 6f;
+    public float attractSpeed = 2f;
     public float idleSlow = 0.1f;
 
     private Rigidbody2D rb;

@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attractDistance: 3.5
-  attractSpeed: 6
+  attractSpeed: 3
   idleSlow: 0.1
 --- !u!1 &948738516483807376
 GameObject:
