@@ -204,7 +204,7 @@ MonoBehaviour:
   potionPrefab: {fileID: 948738515046094201, guid: 0b06512c92fb5814382bda8acd449fd5, type: 3}
   startingHealth: 35
   currentHealth: 0
-  attackDMG: -10
+  attackDMG: -20
 --- !u!114 &7883457777293000623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,6 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b11ebb9125120948a827fd0d4aca4fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerTransform: {fileID: 0}
   radius: 8
   angle: 160
   targetLayer:
@@ -228,7 +229,7 @@ MonoBehaviour:
   speed: 5
   startWaitTime: 2
   chaseSpeed: 3
-  separationRadius: 2
+  canMove: 1
 --- !u!1 &1985033090522305026
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,4 +412,4 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1

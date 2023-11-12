@@ -7,13 +7,15 @@ public class GoblinMovement : MonoBehaviour
 {
     // Get reference variables
     private Rigidbody2D rb;
-    private Transform playerTransform;
+    public Transform playerTransform;
 
-    [Header("FOV Variables")]
-    public float radius = 5;
-    [Range(1, 360)] public float angle = 45;
-    public LayerMask targetLayer;
-    public LayerMask obstructionLayer;
+    private GameObject[] goblins;
+
+    //[Header("FOV Variables")]
+    //public float radius = 5;
+    //[Range(1, 360)] public float angle = 45;
+    //public LayerMask targetLayer;
+    //public LayerMask obstructionLayer;
     public bool CanSeePlayer { get; private set; }
 
     [Header("Patrol Variables")]
@@ -25,8 +27,8 @@ public class GoblinMovement : MonoBehaviour
     private int randomPatrolPoint;
 
     [Header("Chase Variables")]
+    private float separationRadius = 0.5f;
     public float chaseSpeed = 3f;
-    public float separationRadius = 2.0f;
 
     private float aggroRange = 5f;
     private float aggroRangeSqr;
@@ -35,12 +37,15 @@ public class GoblinMovement : MonoBehaviour
     private Vector2 moveDirection;
     private bool hasTargetPosition;
 
+    public bool canMove = true;
+
     void Start()
     {
         // Set reference variables
         rb = GetComponent<Rigidbody2D>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        
+        goblins = GameObject.FindGameObjectsWithTag("Enemy");
+
         // Set patrol points
         Transform spawnPoint = transform.parent;
         int noOfPatrolPoints = spawnPoint.childCount - 1;
@@ -86,9 +91,16 @@ public class GoblinMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (hasTargetPosition)
+        if (canMove)
         {
-            rb.velocity = moveDirection * speed;
+            if (hasTargetPosition)
+            {
+                rb.velocity = moveDirection * speed;
+            }
+            else
+            {
+                rb.velocity = Vector2.zero;
+            }
         }
         else
         {
@@ -98,7 +110,7 @@ public class GoblinMovement : MonoBehaviour
 
     private void HandleRotation()
     {
-        //flip the sprite based on the movement direction
+        // Flip the sprite based on the movement direction
         if (moveDirection.x > 0)  //right
         {
             transform.localScale = new Vector3(1, 1, 1); //no flipping
@@ -117,9 +129,6 @@ public class GoblinMovement : MonoBehaviour
         moveDirection = (targetPosition - position).normalized;
 
         // Move the goblin
-
-        //transform.position = Vector2.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
-
         if ((targetPosition - position).sqrMagnitude > 0.01f)
         {
             hasTargetPosition = true;
@@ -144,24 +153,38 @@ public class GoblinMovement : MonoBehaviour
     {
         moveDirection = (playerTransform.position - transform.position).normalized;
 
-        hasTargetPosition = true;
-
-        //transform.position = Vector2.MoveTowards(this.transform.position, playerTransform.position, chaseSpeed * Time.deltaTime);
+        if ((playerTransform.position - transform.position).sqrMagnitude > 1f)
+        {
+            hasTargetPosition = true;
+        }
+        else if ((playerTransform.position - transform.position).sqrMagnitude < 1f)
+        {
+            hasTargetPosition = false;
+        }
     }
 
     private void ApplySeparation()
     {
-        GameObject[] goblins = GameObject.FindGameObjectsWithTag("Enemy"); //get all enemy game objects
         foreach (GameObject goblin in goblins)
         {
             if (goblin != gameObject)
             {
                 if (Vector2.Distance(transform.position, goblin.transform.position) < separationRadius)
                 {
+                    Debug.Log(separationRadius);
                     Vector2 separationDirection = (transform.position - goblin.transform.position).normalized;
                     transform.Translate(separationDirection * speed * Time.deltaTime, Space.World);
                 }
             }
         }
+    }
+
+    public void SetCanMoveFalse()
+    {
+        canMove = false;
+    }
+    public void SetCanMoveTrue()
+    {
+        canMove = true;
     }
 }
