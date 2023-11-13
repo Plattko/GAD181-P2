@@ -7,6 +7,7 @@ public class Shop : MonoBehaviour
 {
     public GameObject shopNotification;
     public GameObject shopUI;
+    public GameObject witchUI;
     public Transform player;
     private PlayerController playerController;
 
@@ -60,6 +61,7 @@ public class Shop : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F) && shopUI.activeSelf)
         {
             shopUI.SetActive(false);
+            witchUI.SetActive(false);
             playerController.isInShop = false;
         }
         else if (inFrontOfShop)
@@ -67,7 +69,7 @@ public class Shop : MonoBehaviour
             //Debug.Log("Is in front of shop");
             if (Input.GetKeyDown(KeyCode.F) && !shopUI.activeSelf)
             {
-                shopUI.SetActive(true);
+                witchUI.SetActive(true);
                 playerController.isInShop = true;
             }
         }
