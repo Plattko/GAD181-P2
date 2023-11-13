@@ -15,6 +15,7 @@ public class EnemySpawnPoint : MonoBehaviour
 
         enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity, transform);
         enemy.SetActive(false);
+        Shop.enemies.Add(enemy);
     }
 
     public void EnemyDied()

@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
 
     // Upgrade variables
     public float healthReturn = 0f;
+    public float potionPotency = 0f;
 
     // Start is called before the first frame update
     void Start()

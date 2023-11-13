@@ -14,19 +14,26 @@ public class Shop : MonoBehaviour
 
     private int dmgCurrentCost;
     private int healthReturnCurrentCost;
+    private int potionPotencyCurrentCost;
     private int dashCurrentCost;
 
     private int dmgStartingCost = 10;
     private int healthReturnStartingCost = 25;
+    private int potionPotencyStartingCost = 25;
     private int dashStartingCost = 100;
 
     private float dmgIncrease;
     private float healthReturnIncrease = 0.1f;
+    private int potionPotencyIncrease = 5;
     private float dashIncrease;
 
     public TextMeshProUGUI dmgCostText;
     public TextMeshProUGUI healthReturnCostText;
+    public TextMeshProUGUI potionPotencyCostText;
     public TextMeshProUGUI dashCostText;
+
+    public static List<GameObject> enemies = new List<GameObject>();
+    private int enemyHealthIncrease = 15;
     
     // Start is called before the first frame update
     void Start()
@@ -39,6 +46,9 @@ public class Shop : MonoBehaviour
         
         healthReturnCurrentCost = healthReturnStartingCost;
         healthReturnCostText.text = healthReturnStartingCost + " HP";
+
+        potionPotencyCurrentCost = potionPotencyStartingCost;
+        potionPotencyCostText.text = potionPotencyStartingCost + " HP";
 
         dashCurrentCost = dashStartingCost;
         dashCostText.text = dashStartingCost + " HP";
@@ -112,7 +122,7 @@ public class Shop : MonoBehaviour
 
             float newCost = 250f;
             dashCurrentCost = Mathf.RoundToInt(newCost);
-            dashCostText.text = dashCurrentCost + " HP";
+            dashCostText.text = "MAX LEVEL";
 
             Debug.Log("Dash unlocked");
         }
@@ -129,7 +139,30 @@ public class Shop : MonoBehaviour
             healthReturnCurrentCost = Mathf.RoundToInt(newCost);
             healthReturnCostText.text = healthReturnCurrentCost + " HP";
 
-            Debug.Log("Health return is " + playerController.healthReturn);
+            Debug.Log("Health return is: " + playerController.healthReturn);
+        }
+    }
+
+    public void UpgradePotionPotency()
+    {
+        if (playerController.currentHealth > potionPotencyCurrentCost)
+        {
+            playerController.potionPotency += potionPotencyIncrease;
+            playerController.UpdateHealth(-potionPotencyCurrentCost);
+
+            float newCost = potionPotencyCurrentCost + potionPotencyStartingCost;
+            potionPotencyCurrentCost = Mathf.RoundToInt(newCost);
+            potionPotencyCostText.text = potionPotencyCurrentCost + " HP";
+            
+            Debug.Log("The number of enemies is: " + enemies.Count);
+
+            foreach (GameObject enemy in enemies)
+            {
+                enemy.GetComponent<Enemy>().startingHealth += enemyHealthIncrease;
+                Debug.Log("Enemy starting health is: " + enemy.GetComponent<Enemy>().startingHealth);
+            }
+
+            Debug.Log("Potion potency is: " + playerController.potionPotency);
         }
     }
 }

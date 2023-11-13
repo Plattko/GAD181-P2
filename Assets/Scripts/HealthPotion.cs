@@ -54,8 +54,9 @@ public class HealthPotion : MonoBehaviour
             Debug.Log("Damage done is: " + dmgDone);
             Debug.Log("Health Return is: " + playerController.healthReturn);
             Debug.Log("Healing Range is: " + healingRange);
+            Debug.Log("Potion Potency is: " + playerController.potionPotency);
             
-            int healthGain = Mathf.RoundToInt((Mathf.Abs(dmgDone) * playerController.healthReturn) + healingRange);
+            int healthGain = Mathf.RoundToInt((Mathf.Abs(dmgDone) * playerController.healthReturn) + healingRange + playerController.potionPotency);
 
             Debug.Log("Health gain is: " + healthGain);
 
