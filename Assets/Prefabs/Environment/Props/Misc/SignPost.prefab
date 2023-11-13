@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1139845998798486798}
   - component: {fileID: 7944402123438983419}
-  - component: {fileID: 6628663902832527375}
+  - component: {fileID: 5967764008413378397}
   m_Layer: 0
   m_Name: sign post
   m_TagString: Untagged
@@ -117,7 +117,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!70 &6628663902832527375
+--- !u!70 &5967764008413378397
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,6 +149,6 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.9485687, y: -0.40652943}
-  m_Size: {x: 1.0526612, y: 3.6285782}
+  m_Offset: {x: -0.894217, y: 2.3761272}
+  m_Size: {x: 1.2133675, y: 3.4213266}
   m_Direction: 0
