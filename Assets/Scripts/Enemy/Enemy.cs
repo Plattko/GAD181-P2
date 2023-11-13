@@ -25,6 +25,11 @@ public class Enemy : MonoBehaviour
     private float atkCooldown = 1f;
     private float nextAttackAllowed;
 
+    // Potion variables
+    public float dmgDone = 0f;
+    public int healingMin = 5;
+    public int healingMax = 20;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -42,6 +47,7 @@ public class Enemy : MonoBehaviour
     private void OnEnable()
     {
         currentHealth = startingHealth;
+        dmgDone = 0f;
         goblinMovement.canMove = true;
         isDead = false;
 
@@ -113,7 +119,9 @@ public class Enemy : MonoBehaviour
         EnemySpawnPoint spawnPoint = transform.parent.GetComponent<EnemySpawnPoint>();
         spawnPoint.EnemyDied();
 
-        Instantiate(potionPrefab, transform.position, Quaternion.identity);
+        HealthPotion healthPotion = Instantiate(potionPrefab, transform.position, Quaternion.identity).GetComponent<HealthPotion>();
+        healthPotion.dmgDone = dmgDone;
+        healthPotion.healingRange = Random.Range(healingMin, healingMax);
 
         Debug.Log("Enemy died!");
     }

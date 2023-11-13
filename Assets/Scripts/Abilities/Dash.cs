@@ -6,6 +6,7 @@ public class Dash : MonoBehaviour
     public float dashDistance = 5f;
     public float dashDuration = 0.2f;
     public float dashCooldown = 2f;
+    private float nextDashAllowed;
 
     private bool canDash = true;
     private Rigidbody2D rb;
@@ -26,7 +27,7 @@ public class Dash : MonoBehaviour
     {
         UpdateKeyPress();
 
-        if (canDash && Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && Time.time > nextDashAllowed)
         {
             //retrieves the direction for the dash based on the current input.
             Vector2 dashDirection = GetDashDirection();
@@ -43,7 +44,8 @@ public class Dash : MonoBehaviour
 
     IEnumerator PerformDash(Vector2 dashDirection)
     {
-        canDash = false;
+        //canDash = false;
+        nextDashAllowed = Time.time + dashCooldown;
 
         Vector2 startPos = rb.position;
 
@@ -63,8 +65,8 @@ public class Dash : MonoBehaviour
         rb.velocity = originalVelocity;
 
         //applies a cooldown period after the dash and re-enables the ability to dash.
-        yield return new WaitForSeconds(dashCooldown);
-        canDash = true;
+        //yield return new WaitForSeconds(dashCooldown);
+        //canDash = true;
     }
 
     void UpdateKeyPress()

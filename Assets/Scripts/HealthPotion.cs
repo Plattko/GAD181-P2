@@ -12,6 +12,9 @@ public class HealthPotion : MonoBehaviour
     private Rigidbody2D rb;
     private Transform playerTransform;
 
+    public float dmgDone = 0f;
+    public int healingRange = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,7 +50,17 @@ public class HealthPotion : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             PlayerController playerController = collision.GetComponent<PlayerController>();
-            playerController.UpdateHealth(Random.Range(1, 20));
+
+            Debug.Log("Damage done is: " + dmgDone);
+            Debug.Log("Health Return is: " + playerController.healthReturn);
+            Debug.Log("Healing Range is: " + healingRange);
+            Debug.Log("Potion Potency is: " + playerController.potionPotency);
+            
+            int healthGain = Mathf.RoundToInt((Mathf.Abs(dmgDone) * playerController.healthReturn) + healingRange + playerController.potionPotency);
+
+            Debug.Log("Health gain is: " + healthGain);
+
+            playerController.UpdateHealth(healthGain);
             Destroy(gameObject);
         }
     }
