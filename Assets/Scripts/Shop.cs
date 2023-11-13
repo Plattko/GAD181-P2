@@ -13,15 +13,19 @@ public class Shop : MonoBehaviour
     private bool inFrontOfShop = false;
 
     private int dmgCurrentCost;
+    private int healthReturnCurrentCost;
     private int dashCurrentCost;
 
     private int dmgStartingCost = 10;
+    private int healthReturnStartingCost = 25;
     private int dashStartingCost = 100;
 
     private float dmgIncrease;
+    private float healthReturnIncrease = 0.1f;
     private float dashIncrease;
 
     public TextMeshProUGUI dmgCostText;
+    public TextMeshProUGUI healthReturnCostText;
     public TextMeshProUGUI dashCostText;
     
     // Start is called before the first frame update
@@ -32,6 +36,9 @@ public class Shop : MonoBehaviour
         dmgCurrentCost = dmgStartingCost;
         dmgCostText.text = dmgStartingCost + " HP";
         dmgIncrease = playerController.startingAttackDamage * 0.20f;
+        
+        healthReturnCurrentCost = healthReturnStartingCost;
+        healthReturnCostText.text = healthReturnStartingCost + " HP";
 
         dashCurrentCost = dashStartingCost;
         dashCostText.text = dashStartingCost + " HP";
@@ -53,6 +60,11 @@ public class Shop : MonoBehaviour
                 shopUI.SetActive(true);
                 playerController.isInShop = true;
             }
+        }
+
+        if (playerController.healthReturn >= 1f)
+        {
+            healthReturnCostText.text = "MAX LEVEL";
         }
     }
 
@@ -78,11 +90,10 @@ public class Shop : MonoBehaviour
     {
         if (playerController.currentHealth > dmgCurrentCost)
         {
-            //float atkDMG = playerController.attackDamage;
             playerController.attackDamage += dmgIncrease;
             playerController.UpdateHealth(-dmgCurrentCost);
 
-            float newCost = dmgCurrentCost * 1.5f;
+            float newCost = dmgCurrentCost + (dmgCurrentCost * 0.1f);
             dmgCurrentCost = Mathf.RoundToInt(newCost);
             dmgCostText.text = dmgCurrentCost + " HP";
 
@@ -104,6 +115,21 @@ public class Shop : MonoBehaviour
             dashCostText.text = dashCurrentCost + " HP";
 
             Debug.Log("Dash unlocked");
+        }
+    }
+
+    public void UpgradeHealthReturn()
+    {
+        if (playerController.currentHealth > healthReturnCurrentCost && playerController.healthReturn != 1f)
+        {
+            playerController.healthReturn += healthReturnIncrease;
+            playerController.UpdateHealth(-healthReturnCurrentCost);
+
+            float newCost = healthReturnCurrentCost + (healthReturnCurrentCost * 0.1f);
+            healthReturnCurrentCost = Mathf.RoundToInt(newCost);
+            healthReturnCostText.text = healthReturnCurrentCost + " HP";
+
+            Debug.Log("Health return is " + playerController.healthReturn);
         }
     }
 }
