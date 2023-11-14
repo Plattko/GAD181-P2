@@ -14,6 +14,9 @@ public class PlayerAttacks : MonoBehaviour
     private float attackCooldown = 0.3f;
     private bool canAttack = true;
 
+    //private float knockbackPower = 2f;
+
+    // Attack direction
     private Vector2 mousePos;
 
     public enum AttackType
@@ -99,6 +102,7 @@ public class PlayerAttacks : MonoBehaviour
         {
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             enemy.TakeDamage(playerController.attackDamage);
+            //StartCoroutine(Knockback.DoKnockback(knockbackPower, enemy.GetComponent<Rigidbody2D>(), this.transform, enemy.transform));
         }
     }
 
