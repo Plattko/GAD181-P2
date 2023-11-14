@@ -44,7 +44,7 @@ public class Dash : MonoBehaviour
 
     IEnumerator PerformDash(Vector2 dashDirection)
     {
-        //canDash = false;
+        //applies a cooldown period
         nextDashAllowed = Time.time + dashCooldown;
 
         Vector2 startPos = rb.position;
@@ -63,10 +63,6 @@ public class Dash : MonoBehaviour
         }
 
         rb.velocity = originalVelocity;
-
-        //applies a cooldown period after the dash and re-enables the ability to dash.
-        //yield return new WaitForSeconds(dashCooldown);
-        //canDash = true;
     }
 
     void UpdateKeyPress()
