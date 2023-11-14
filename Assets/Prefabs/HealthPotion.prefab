@@ -43,7 +43,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 948738515046094201}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -113,6 +113,8 @@ MonoBehaviour:
   attractDistance: 3.5
   attractSpeed: 3
   idleSlow: 0.1
+  dmgDone: 0
+  healingRange: 0
 --- !u!1 &948738516483807376
 GameObject:
   m_ObjectHideFlags: 0

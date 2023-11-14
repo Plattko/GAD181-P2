@@ -8,7 +8,6 @@ public class Dash : MonoBehaviour
     public float dashCooldown = 2f;
     private float nextDashAllowed;
 
-    private bool canDash = true;
     private Rigidbody2D rb;
     private Vector2 originalVelocity = Vector2.zero;
 

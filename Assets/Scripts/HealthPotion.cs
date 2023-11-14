@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class HealthPotion : MonoBehaviour
 {
+    // Potion attraction towards player
+    private bool potionAttracts = false;
     public float attractDistance = 3.5f;
     private float attractDistanceSqr;
     public float attractSpeed = 2f;
     public float idleSlow = 0.1f;
+
+    private float pickupDelay = 1f;
+    private float dropForce = 1f;
 
     private Rigidbody2D rb;
     private Transform playerTransform;
@@ -21,6 +26,8 @@ public class HealthPotion : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         playerTransform = GameObject.Find("Player").transform;
         attractDistanceSqr = attractDistance * attractDistance;
+
+        StartCoroutine("PotionDrop");
     }
 
     // Update is called once per frame
@@ -34,12 +41,19 @@ public class HealthPotion : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if ((playerTransform.position - transform.position).sqrMagnitude < attractDistanceSqr)
+        if (potionAttracts)
         {
-            Vector2 targetDirection = (playerTransform.position - transform.position).normalized;
-            rb.velocity = new Vector2(targetDirection.x, targetDirection.y) * attractSpeed;
+            if ((playerTransform.position - transform.position).sqrMagnitude < attractDistanceSqr)
+            {
+                Vector2 targetDirection = (playerTransform.position - transform.position).normalized;
+                rb.velocity = new Vector2(targetDirection.x, targetDirection.y) * attractSpeed;
+            }
+            else if ((playerTransform.position - transform.position).sqrMagnitude > attractDistanceSqr)
+            {
+                rb.velocity = Vector2.Lerp(rb.velocity, Vector2.zero, idleSlow);
+            }
         }
-        else if ((playerTransform.position - transform.position).sqrMagnitude > attractDistanceSqr)
+        else
         {
             rb.velocity = Vector2.Lerp(rb.velocity, Vector2.zero, idleSlow);
         }
@@ -63,6 +77,19 @@ public class HealthPotion : MonoBehaviour
             playerController.UpdateHealth(healthGain);
             Destroy(gameObject);
         }
+    }
+
+    private IEnumerator PotionDrop()
+    {
+        Vector2 randDirection = Random.insideUnitCircle.normalized;
+
+        rb.AddForce(randDirection * dropForce, ForceMode2D.Impulse);
+
+        // enable collision and bool for fixed update
+        yield return new WaitForSeconds(pickupDelay);
+
+        GetComponent<CircleCollider2D>().enabled = true;
+        potionAttracts = true;
     }
 
     private void OnDrawGizmosSelected()
